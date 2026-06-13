@@ -3,4 +3,5 @@ headless = true
 enableCORS = false
 
 [theme]
-base = "light + dark"
+base = "dark"
+
