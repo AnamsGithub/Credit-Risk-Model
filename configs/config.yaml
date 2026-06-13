@@ -1,0 +1,22 @@
+# Scorecard Scaling Parameters
+scaling:
+  base_score: 650
+  base_odds: 5           # Odds of Good:Bad (5 to 1) at base score
+  pdo: 75                  # Points to Double Odds
+  minimum_score: 300
+  maximum_score: 850
+
+# Portfolio and Financial Simulation Parameters
+financials:
+  avg_interest_rate: 0.12     # Average interest rate (12% per annum)
+  loss_given_default: 0.60    # Loss Given Default (LGD) of 60%
+  avg_loan_term_years: 3      # Typical loan term (3 years)
+
+# Data Locations
+paths:
+  raw_data_path: "data/loan.csv"
+  woe_mapping_path: "outputs/scorecards/woe_mapping.json"
+  scorecard_table_path: "outputs/scorecards/scorecard_table.csv"
+  woe_tables_path: "outputs/scorecards/woe_tables.csv"
+  iv_report_path: "outputs/scorecards/iv_report.csv"
+  feature_dictionary_path: "outputs/scorecards/feature_dictionary.xlsx"

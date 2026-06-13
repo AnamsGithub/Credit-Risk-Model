@@ -1,0 +1,35 @@
+# Python virtual environments
+.conda/
+venv/
+.venv/
+env/
+ENV/
+bin/
+lib/
+include/
+
+# Python caching
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Streamlit secrets & local config (if sensitive)
+.streamlit/secrets.toml
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Large outputs or temporary execution assets
+outputs/monitoring/*.xlsx
+outputs/reports/*.png
+outputs/scorecards/*.csv
