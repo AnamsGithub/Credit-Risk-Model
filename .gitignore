@@ -29,7 +29,3 @@ __pycache__/
 ehthumbs.db
 Thumbs.db
 
-# Large outputs or temporary execution assets
-outputs/monitoring/*.xlsx
-outputs/reports/*.png
-outputs/scorecards/*.csv
