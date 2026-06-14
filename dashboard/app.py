@@ -2206,7 +2206,7 @@ elif nav_selection == "Expected Credit Loss Framework":
                 badge_color = "#842029"
                 border_color = "#F5C2C7"
                 
-            st.markdown(f"""
+            st.markdown(clean_html(f"""
             <div style="background-color: var(--secondary-background-color); border: 1px solid rgba(128,128,128,0.15); border-radius: 12px; padding: 25px; margin-bottom: 20px;">
                 <div style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-color); opacity: 0.6; font-weight: 600;">ECL Risk Assessment</div>
                 <div style="display: inline-block; padding: 4px 12px; font-weight: 700; border-radius: 6px; font-size: 1.1rem; margin-top: 8px; margin-bottom: 20px; background-color: {badge_bg}; color: {badge_color}; border: 1px solid {border_color};">
@@ -2234,7 +2234,7 @@ elif nav_selection == "Expected Credit Loss Framework":
                     </div>
                 </div>
             </div>
-            """, unsafe_allow_html=True)
+            """), unsafe_allow_html=True)
             
             st.markdown("### Decision Recommendation")
             st.write(f"The baseline applicant scoring recommendation is **{res['pd_decision']}** based on their PD risk band (**{pd_band}**). Under the ECL Risk Tier system, this credit risk profile triggers a **{tier}** designation.")
@@ -2242,45 +2242,44 @@ elif nav_selection == "Expected Credit Loss Framework":
     st.markdown("<br/>", unsafe_allow_html=True)
     st.subheader("Expected Credit Loss Flow (Sequencing credit risk)")
     
-    # Drawing horizontal SVG sequencing flow
-    st.markdown("""
+    st.markdown(clean_html("""
     <div style="background-color: var(--secondary-background-color); border: 1px solid rgba(128,128,128,0.15); border-radius: 12px; padding: 25px; display: flex; justify-content: center; overflow-x: auto; margin-bottom: 25px;">
         <svg width="680" height="120" viewBox="0 0 680 120" fill="none" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%;">
             <!-- Step 1: PD -->
-            <rect x="10" y="10" width="130" height="70" rx="8" fill="#2563EB" fill-opacity="0.15" stroke="#2563EB" stroke-width="2"/>
-            <text x="75" y="38" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="var(--text-color)" text-anchor="middle">Probability (PD)</text>
-            <text x="75" y="58" font-family="'Inter', sans-serif" font-size="9" opacity="0.8" fill="var(--text-color)" text-anchor="middle">Underwriting Scorecard</text>
+            <rect x="10" y="10" width="130" height="70" rx="8" fill="#2563EB" stroke="#1D4ED8" stroke-width="2"/>
+            <text x="75" y="38" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" text-anchor="middle">Probability (PD)</text>
+            <text x="75" y="58" font-family="'Inter', sans-serif" font-size="9" opacity="0.85" fill="#FFFFFF" text-anchor="middle">Underwriting Scorecard</text>
             
-            <path d="M150 45 L 180 45" stroke="var(--text-color)" stroke-width="2" stroke-dasharray="3,3" marker-end="url(#arrow)"/>
+            <path d="M150 45 L 180 45" stroke="#64748B" stroke-width="2" marker-end="url(#arrow)"/>
             
             <!-- Step 2: EAD -->
-            <rect x="190" y="10" width="130" height="70" rx="8" fill="#10B981" fill-opacity="0.15" stroke="#10B981" stroke-width="2"/>
-            <text x="255" y="38" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="var(--text-color)" text-anchor="middle">Exposure (EAD)</text>
-            <text x="255" y="58" font-family="'Inter', sans-serif" font-size="9" opacity="0.8" fill="var(--text-color)" text-anchor="middle">Outstanding Balance</text>
+            <rect x="190" y="10" width="130" height="70" rx="8" fill="#10B981" stroke="#059669" stroke-width="2"/>
+            <text x="255" y="38" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" text-anchor="middle">Exposure (EAD)</text>
+            <text x="255" y="58" font-family="'Inter', sans-serif" font-size="9" opacity="0.85" fill="#FFFFFF" text-anchor="middle">Outstanding Balance</text>
             
-            <path d="M330 45 L 360 45" stroke="var(--text-color)" stroke-width="2" stroke-dasharray="3,3" marker-end="url(#arrow)"/>
+            <path d="M330 45 L 360 45" stroke="#64748B" stroke-width="2" marker-end="url(#arrow)"/>
             
             <!-- Step 3: LGD -->
-            <rect x="370" y="10" width="130" height="70" rx="8" fill="#F97316" fill-opacity="0.15" stroke="#F97316" stroke-width="2"/>
-            <text x="435" y="38" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="var(--text-color)" text-anchor="middle">Severity (LGD)</text>
-            <text x="435" y="58" font-family="'Inter', sans-serif" font-size="9" opacity="0.8" fill="var(--text-color)" text-anchor="middle">Unrecovered Loss %</text>
+            <rect x="370" y="10" width="130" height="70" rx="8" fill="#F97316" stroke="#EA580C" stroke-width="2"/>
+            <text x="435" y="38" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" text-anchor="middle">Severity (LGD)</text>
+            <text x="435" y="58" font-family="'Inter', sans-serif" font-size="9" opacity="0.85" fill="#FFFFFF" text-anchor="middle">Unrecovered Loss %</text>
             
-            <path d="M510 45 L 540 45" stroke="var(--text-color)" stroke-width="2" stroke-dasharray="3,3" marker-end="url(#arrow)"/>
+            <path d="M510 45 L 540 45" stroke="#64748B" stroke-width="2" marker-end="url(#arrow)"/>
             
             <!-- Step 4: ECL -->
-            <rect x="550" y="10" width="120" height="70" rx="8" fill="#7B61FF" fill-opacity="0.2" stroke="#7B61FF" stroke-width="2"/>
-            <text x="610" y="38" font-family="'Inter', sans-serif" font-size="12" font-weight="800" fill="var(--text-color)" text-anchor="middle">ECL Value</text>
-            <text x="610" y="58" font-family="'Inter', sans-serif" font-size="9" font-weight="700" fill="var(--text-color)" text-anchor="middle">PD × LGD × EAD</text>
+            <rect x="550" y="10" width="120" height="70" rx="8" fill="#7B61FF" stroke="#6366F1" stroke-width="2"/>
+            <text x="610" y="38" font-family="'Inter', sans-serif" font-size="12" font-weight="800" fill="#FFFFFF" text-anchor="middle">ECL Value</text>
+            <text x="610" y="58" font-family="'Inter', sans-serif" font-size="9" font-weight="700" fill="#FFFFFF" text-anchor="middle">PD × LGD × EAD</text>
             
             <!-- Definitions -->
             <defs>
                 <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--text-color)"/>
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B"/>
                 </marker>
             </defs>
         </svg>
     </div>
-    """, unsafe_allow_html=True)
+    """), unsafe_allow_html=True)
 
 
 
