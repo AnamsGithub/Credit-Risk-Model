@@ -30,6 +30,8 @@ from policy_sim import PolicySimulatorPlotter
 from pdf_generator import PDFReportGenerator
 # pyrefly: ignore [missing-import]
 from ppt_generator import PPTPresentationGenerator
+from lgd_model import LGDModel
+from ead_model import EADModel
 
 def main():
     print("==================================================")
@@ -253,6 +255,38 @@ def main():
     profit_img = "outputs/reports/profit_optimization_curve.png"
     PolicySimulatorPlotter.plot_tradeoff_curves(cutoff_sim, tradeoff_img)
     PolicySimulatorPlotter.plot_profit_optimization(cutoff_sim, profit_img)
+    
+    # 8.5. Loss Given Default (LGD) and Exposure at Default (EAD) Modeling
+    print("\n8.5. Training LGD and EAD Models...")
+    lgd_model = LGDModel()
+    metrics_lgd = lgd_model.fit(train_df, oot_df)
+    lgd_model.save_model("outputs/scorecards/lgd_model.pkl")
+    
+    # Predict and save LGD predictions for defaults
+    oot_defaults = oot_df[oot_df['target'] == 1].copy()
+    if len(oot_defaults) == 0 and 'loan_status' in oot_df.columns:
+        oot_defaults = oot_df[oot_df['loan_status'].isin(['Charged Off', 'Default'])].copy()
+        
+    oot_defaults['actual_lgd'] = lgd_model.calculate_lgd_target(oot_defaults)
+    oot_defaults['pred_lgd'] = lgd_model.predict_lgd(oot_defaults)
+    oot_defaults[['id', 'member_id', 'actual_lgd', 'pred_lgd']].to_csv("outputs/scorecards/lgd_predictions.csv", index=False)
+    lgd_model.generate_report(train_df, oot_df, "outputs/reports/lgd_model_report.pdf", metrics_lgd)
+    
+    ead_model = EADModel()
+    metrics_ead = ead_model.fit(train_df, oot_df)
+    ead_model.save_model("outputs/scorecards/ead_model.pkl")
+    
+    # Predict and save EAD predictions for defaults
+    oot_defaults['actual_ead_pct'] = ead_model.calculate_ead_target(oot_defaults)
+    oot_defaults['pred_ead_pct'] = ead_model.predict_ead(oot_defaults)
+    oot_defaults[['id', 'member_id', 'actual_ead_pct', 'pred_ead_pct']].to_csv("outputs/scorecards/ead_predictions.csv", index=False)
+    ead_model.generate_report(train_df, oot_df, "outputs/reports/ead_model_report.pdf", metrics_ead)
+    
+    # Verify ECL Engine batch run
+    from ecl_engine import ECLEngine
+    ecl_engine = ECLEngine()
+    oot_ecl_df = ecl_engine.predict_batch_ecl(oot_df)
+    print(f"OOT Average Expected Credit Loss (ECL): ${oot_ecl_df['ecl'].mean():.2f}")
     
     # 9. PDF Reports Generation
     print("\n9. Generating Institutional PDF Reports...")

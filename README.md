@@ -45,6 +45,9 @@ The system utilizes a modular python library structure:
 │   ├── woe_binning.py               # Decision-tree binned WoE transformer
 │   ├── scorecard.py                 # Logistic regression fitting & Scorecard point scaling
 │   ├── xgboost_model.py             # Challenger tree-boosting model training
+│   ├── lgd_model.py                 # Loss Given Default (LGD) regression model
+│   ├── ead_model.py                 # Exposure at Default (EAD) regression model
+│   ├── ecl_engine.py                # Expected Credit Loss (ECL) calculation engine
 │   ├── validation.py                # ROC-AUC, KS separation, and Brier Score calibration
 │   ├── stability.py                 # PSI and CSI population drift tracking
 │   ├── score_monitoring.py          # Score distribution shifts & migration matrices
@@ -54,7 +57,17 @@ The system utilizes a modular python library structure:
 ├── dashboard/
 │   └── app.py                       # Enterprise Credit Decision Portal (Streamlit)
 ├── tests/
-│   └── test_score_engine.py         # Unit tests validating scorecard points lookup math
+│   ├── test_score_engine.py         # Unit tests validating scorecard points lookup math
+│   └── test_ecl_engine.py           # Unit tests validating ECL calculation engine
+├── notebooks/
+│   ├── 01_EDA.ipynb                 # Phase 1: Exploratory Data Analysis
+│   ├── 02_WOE_Binning.ipynb         # Phase 2: Weight of Evidence (WoE) Binning
+│   ├── 03_Logistic_Scorecard.ipynb  # Phase 3: Logistic Regression Scorecard
+│   ├── 04_XGBoost_Challenger.ipynb  # Phase 4: XGBoost Challenger Model
+│   ├── 05_Model_Validation.ipynb    # Phase 5: Model Validation & Monitoring
+│   ├── 06_Policy_Simulation.ipynb   # Phase 6: Business Policy Simulation
+│   ├── 07_LGD_Model.ipynb           # Phase 7: Loss Given Default (LGD) Modeling
+│   └── 08_EAD_Model.ipynb           # Phase 8: Exposure at Default (EAD) Modeling
 ├── verify_pipeline.py               # Central execution orchestrator
 └── score_generation_engine.py       # Production scoring module
 ```
@@ -105,6 +118,17 @@ Because the modeling dataset only includes approved and booked loans, it suffers
 2. **Parceling:** Categorize rejected applicants into risk bins. Impute default outcomes to a sample of each bin matching approved default rates scaled up by a risk factor (e.g., 2.0x).
 3. **Re-weighting:** Assign weights to approved applicants to represent the broader applicant pool, inflating the importance of approved applicants who resemble rejected individuals.
 
+### 5.4. LGD, EAD, and Expected Credit Loss (ECL) Framework
+To satisfy IFRS 9 and Basel Accords requirements, the platform extends default probability models into a complete credit loss framework:
+* **Loss Given Default (LGD) Model:** Estimating loss severity rate ($LGD = \frac{\text{Exposure} - \text{Recoveries}}{\text{Exposure}}$) on the default cohort using `XGBRegressor` (primary) and `RandomForestRegressor` (benchmark). Capped within $[0.0, 1.0]$.
+* **Exposure at Default (EAD) Model:** Estimating expected outstanding balance at default as a percentage of funded principal ($EAD\% = \frac{\text{Funded Amount} - \text{Principal Repaid}}{\text{Funded Amount}}$) on defaults using `XGBRegressor`. Capped within $[0.0, 1.0]$.
+* **Expected Credit Loss (ECL) Calculation Engine:** Joins models to compute:
+  $$\text{ECL} = \text{PD} \times \text{LGD} \times (\text{EAD\%} \times \text{Funded Amount})$$
+  Assigns Risk Tiers based on ECL as a percentage of Loan Amount:
+  * **Low ECL:** ECL $\le$ 1.5% of Loan Amount (e.g. high credit score, low LGD, low exposure)
+  * **Medium ECL:** 1.5% < ECL $\le$ 5.0% of Loan Amount
+  * **High ECL:** ECL > 5.0% of Loan Amount
+
 ---
 
 ## 6. Validation & Performance Results
@@ -139,14 +163,15 @@ By simulating various score cutoff thresholds, risk executives can manage portfo
 
 ## 8. Dashboard Demo
 
-The interactive **Enterprise Credit Decision Portal** (`dashboard/app.py`) is organized into 7 distinct risk modules:
+The interactive **Enterprise Credit Decision Portal** (`dashboard/app.py`) is organized into 8 distinct risk modules:
 1. **Executive Overview:** High-level executive briefing containing the 6 primary credit risk KPIs (Total Loans, Default Rate, ROC-AUC, KS, Gini, PSI) and portfolio distribution.
 2. **Credit Risk Simulator:** Production underwriting tool. Input borrower parameters, view the automated decision (Approve/Refer/Decline), inspect FICO placement on a gauge indicator, and view the transparent scorecard point breakdown. Shows clear segregation between Model Predictors and Policy Info.
-3. **Project Journey:** Vertical step-by-step visual stepper outlining data pipeline stages from source ingestion to policy cutoff.
-4. **Layman's Explainer:** A non-technical guide explaining credit risk concepts (WoE, IV, scorecards) to recruiters and MBA interviewers.
-5. **Model Performance:** Side-by-side performance curves (ROC, KS, Probability Calibration) comparing Champion and Challenger.
-6. **Risk Monitoring:** Population stability tracking, displaying PSI matrices, characteristic drift (CSI) status, and score distribution shifts.
-7. **Lending Policy Simulator:** Cutoff optimizer. Adjust score cutoffs using a slider to view dynamic approval rates, defaults, expected credit losses, and revenue yields on profit curves.
+3. **Lending Policy Simulator:** Cutoff optimizer. Adjust score cutoffs using a slider to view dynamic approval rates, defaults, expected credit losses, and revenue yields on profit curves.
+4. **Expected Credit Loss Framework:** Regulatory provisioning suite. Explain PD, LGD, and EAD metrics using visual cards; calculate dynamic credit losses in real time for consumer applications; review credit loss flow via an interactive SVG sequencing chart.
+5. **Model Development Lifecycle:** Vertical step-by-step visual stepper outlining data pipeline stages from source ingestion to policy cutoff.
+6. **Understanding Credit Risk Modeling:** A non-technical layman's guide explaining credit risk concepts (WoE, IV, scorecards) to recruiters and MBA interviewers.
+7. **Champion vs Challenger Performance:** Side-by-side performance curves (ROC, KS, Probability Calibration) comparing Champion and Challenger.
+8. **Portfolio Stability & Monitoring:** Population stability tracking, displaying PSI matrices, characteristic drift (CSI) status, and score distribution shifts.
 
 ---
 

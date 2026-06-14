@@ -568,5 +568,131 @@ def main():
     ]
     create_notebook("06_Policy_Simulation.ipynb", policy_cells)
 
+    # ==========================================
+    # 07_LGD_Model.ipynb
+    # ==========================================
+    lgd_cells = [
+        make_cell("markdown", [
+            "# Phase 7: Loss Given Default (LGD) Modeling",
+            "This notebook implements Loss Given Default (LGD) modeling. LGD estimates the severity of loss when a loan defaults. Target is defined as: `LGD = (loan_amnt - recoveries) / loan_amnt` capped to `[0.0, 1.0]`."
+        ]),
+        make_cell("code", [
+            "import pandas as pd",
+            "import numpy as np",
+            "import os",
+            "import sys",
+            "",
+            "# Ensure we are running from the project root directory",
+            "if os.path.basename(os.getcwd()) == 'notebooks':",
+            "    os.chdir('..')",
+            "",
+            "sys.path.append(os.path.abspath('src'))",
+            "from data_processing import DataProcessor",
+            "from lgd_model import LGDModel"
+        ]),
+        make_cell("markdown", [
+            "## 1. Load Data Splits",
+            "Load the preprocessed default datasets for model training."
+        ]),
+        make_cell("code", [
+            "processor = DataProcessor('data/loan.csv')",
+            "processor.clean_data()",
+            "train_df, oot_df = processor.split_data()",
+            "print('Train size:', train_df.shape)",
+            "print('OOT size:', oot_df.shape)"
+        ]),
+        make_cell("markdown", [
+            "## 2. Train LGD Models",
+            "Instantiate and fit LGD models (XGBoost Regressor and Random Forest benchmark) on historical default occurrences."
+        ]),
+        make_cell("code", [
+            "lgd_model = LGDModel()",
+            "metrics = lgd_model.fit(train_df, oot_df)",
+            "print('Model Evaluation Metrics:')",
+            "print(metrics)"
+        ]),
+        make_cell("markdown", [
+            "## 3. Generate Predictions & Reports",
+            "Calculate predictions for the OOT validation set, evaluate error residuals, save the pickled model file, and compile the final PDF model documentation report."
+        ]),
+        make_cell("code", [
+            "# Predict on OOT",
+            "oot_defaults = oot_df[oot_df['loan_status'].isin(['Charged Off', 'Default'])].copy()",
+            "oot_defaults['pred_lgd'] = lgd_model.predict_lgd(oot_defaults)",
+            "oot_defaults['actual_lgd'] = lgd_model.calculate_lgd_target(oot_defaults)",
+            "print(oot_defaults[['actual_lgd', 'pred_lgd']].describe())",
+            "",
+            "# Save outputs",
+            "lgd_model.save_model('outputs/scorecards/lgd_model.pkl')",
+            "oot_defaults[['id', 'member_id', 'actual_lgd', 'pred_lgd']].to_csv('outputs/scorecards/lgd_predictions.csv', index=False)",
+            "lgd_model.generate_report(train_df, oot_df, 'outputs/reports/lgd_model_report.pdf', metrics)",
+            "print('LGD predictions and PDF report generated successfully.')"
+        ])
+    ]
+    create_notebook("07_LGD_Model.ipynb", lgd_cells)
+
+    # ==========================================
+    # 08_EAD_Model.ipynb
+    # ==========================================
+    ead_cells = [
+        make_cell("markdown", [
+            "# Phase 8: Exposure at Default (EAD) Modeling",
+            "This notebook implements Exposure at Default (EAD) modeling. EAD estimates the exposure amount (outstanding balance) at the time of default. Target is defined as: `EAD % = (funded_amnt - total_rec_prncp) / funded_amnt` capped to `[0.0, 1.0]`."
+        ]),
+        make_cell("code", [
+            "import pandas as pd",
+            "import numpy as np",
+            "import os",
+            "import sys",
+            "",
+            "# Ensure we are running from the project root directory",
+            "if os.path.basename(os.getcwd()) == 'notebooks':",
+            "    os.chdir('..')",
+            "",
+            "sys.path.append(os.path.abspath('src'))",
+            "from data_processing import DataProcessor",
+            "from ead_model import EADModel"
+        ]),
+        make_cell("markdown", [
+            "## 1. Load Data Splits",
+            "Load the preprocessed default datasets."
+        ]),
+        make_cell("code", [
+            "processor = DataProcessor('data/loan.csv')",
+            "processor.clean_data()",
+            "train_df, oot_df = processor.split_data()",
+            "print('Train size:', train_df.shape)",
+            "print('OOT size:', oot_df.shape)"
+        ]),
+        make_cell("markdown", [
+            "## 2. Train EAD Model",
+            "Instantiate and fit the EAD XGBoost model on historical defaults."
+        ]),
+        make_cell("code", [
+            "ead_model = EADModel()",
+            "metrics = ead_model.fit(train_df, oot_df)",
+            "print('Model Evaluation Metrics:')",
+            "print(metrics)"
+        ]),
+        make_cell("markdown", [
+            "## 3. Generate Predictions & Reports",
+            "Calculate predictions for the OOT validation set, save the pickled model file, and compile the final PDF model report."
+        ]),
+        make_cell("code", [
+            "# Predict on OOT",
+            "oot_defaults = oot_df[oot_df['loan_status'].isin(['Charged Off', 'Default'])].copy()",
+            "oot_defaults['pred_ead_pct'] = ead_model.predict_ead(oot_defaults)",
+            "oot_defaults['actual_ead_pct'] = ead_model.calculate_ead_target(oot_defaults)",
+            "print(oot_defaults[['actual_ead_pct', 'pred_ead_pct']].describe())",
+            "",
+            "# Save outputs",
+            "ead_model.save_model('outputs/scorecards/ead_model.pkl')",
+            "oot_defaults[['id', 'member_id', 'actual_ead_pct', 'pred_ead_pct']].to_csv('outputs/scorecards/ead_predictions.csv', index=False)",
+            "ead_model.generate_report(train_df, oot_df, 'outputs/reports/ead_model_report.pdf', metrics)",
+            "print('EAD predictions and PDF report generated successfully.')"
+        ])
+    ]
+    create_notebook("08_EAD_Model.ipynb", ead_cells)
+
 if __name__ == "__main__":
     main()

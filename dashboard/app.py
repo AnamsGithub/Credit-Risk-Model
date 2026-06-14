@@ -920,6 +920,7 @@ nav_selection = st.sidebar.radio(
         "Executive Overview",
         "Credit Risk Simulator",
         "Lending Policy Simulator",
+        "Expected Credit Loss Framework",
         "Model Development Lifecycle",
         "Understanding Credit Risk Modeling",
         "Champion vs Challenger Performance",
@@ -1974,6 +1975,312 @@ elif nav_selection == "Lending Policy Simulator":
             
     else:
         st.info("Lending simulation report not found.")
+
+# ==========================================
+# 8. Expected Credit Loss Framework
+# ==========================================
+elif nav_selection == "Expected Credit Loss Framework":
+    st.header("Expected Credit Loss (ECL) Framework")
+    st.markdown("""
+    <div style="background-color: var(--secondary-background-color); border-left: 5px solid var(--primary-color); padding: 15px; border-radius: 6px; margin-bottom: 20px; font-size: 0.95rem; line-height: 1.5; color: var(--text-color);">
+        <b>IFRS 9 / Basel Credit Analytics Integration:</b> Evaluate credit portfolio loss expectations by decomposing risk into Probability of Default (PD), Loss Given Default (LGD), and Exposure at Default (EAD). 
+        Expected Credit Loss is calculated using the regulatory standard formula: 
+        <span style="font-family: monospace; font-weight: bold; color: var(--primary-color);">ECL = PD × LGD × EAD</span>.
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # 1. Risk Decomposition Cards
+    st.subheader("Credit Loss Component Decomposition")
+    
+    col_card1, col_card2, col_card3 = st.columns(3)
+    
+    with col_card1:
+        st.markdown("""
+        <div style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(37, 99, 235, 0.01) 100%); border: 1px solid rgba(37, 99, 235, 0.2); border-radius: 12px; padding: 20px; min-height: 230px;">
+            <div style="margin-bottom: 12px; display: flex; align-items: center;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px;">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 16v-4"></path>
+                    <path d="M12 8h.01"></path>
+                </svg>
+                <span style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--text-color);">Probability of Default (PD)</span>
+            </div>
+            <p style="font-size: 0.88rem; line-height: 1.5; color: var(--text-color); opacity: 0.85;">
+                The mathematical likelihood that a borrower will default on their debt obligation over a 12-month horizon. 
+            </p>
+            <div style="margin-top: 15px; font-size: 0.8rem; color: var(--text-color); opacity: 0.7;">
+                <b>Driven by:</b> Application Scorecard (Logistic Regression) based on age of history, income, inquiries, and utilization.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    with col_card2:
+        st.markdown("""
+        <div style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.08) 0%, rgba(249, 115, 22, 0.01) 100%); border: 1px solid rgba(249, 115, 22, 0.2); border-radius: 12px; padding: 20px; min-height: 230px;">
+            <div style="margin-bottom: 12px; display: flex; align-items: center;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px;">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    <path d="M12 8v4"></path>
+                    <path d="M12 16h.01"></path>
+                </svg>
+                <span style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--text-color);">Loss Given Default (LGD)</span>
+            </div>
+            <p style="font-size: 0.88rem; line-height: 1.5; color: var(--text-color); opacity: 0.85;">
+                The severity of loss if a default occurs, expressing net credit loss as a percentage of exposure. Calculated as <code>(Exposure - Recoveries) / Exposure</code>.
+            </p>
+            <div style="margin-top: 15px; font-size: 0.8rem; color: var(--text-color); opacity: 0.7;">
+                <b>Driven by:</b> XGBoost regression on default cohorts, modeling recovery potential based on application-time assets.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    with col_card3:
+        st.markdown("""
+        <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.01) 100%); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 20px; min-height: 230px;">
+            <div style="margin-bottom: 12px; display: flex; align-items: center;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px;">
+                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                </svg>
+                <span style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--text-color);">Exposure at Default (EAD)</span>
+            </div>
+            <p style="font-size: 0.88rem; line-height: 1.5; color: var(--text-color); opacity: 0.85;">
+                The projected gross outstanding balance of the facility at the time of default. Accounts for principal repayment schedule prior to default.
+            </p>
+            <div style="margin-top: 15px; font-size: 0.8rem; color: var(--text-color); opacity: 0.7;">
+                <b>Driven by:</b> XGBoost regression modeling the percent of the initial funded loan amount still unpaid when default takes place.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("<br/>", unsafe_allow_html=True)
+    
+    # Check for ECL Engine
+    ecl_engine = None
+    try:
+        from ecl_engine import ECLEngine
+        ecl_engine = ECLEngine()
+    except Exception as e:
+        st.warning(f"Expected Credit Loss engine components are being calibrated. Please complete training first. (Error: {e})")
+        
+    if ecl_engine is not None:
+        col_ecl1, col_ecl2 = st.columns([3, 2])
+        
+        with col_ecl1:
+            st.subheader("Expected Loss Calculator")
+            
+            with st.container():
+                st.write("### Borrower Financial & Credit Inputs")
+                
+                e_loan_amnt = st.number_input(
+                    "Requested Loan Amount ($):",
+                    min_value=500, max_value=100000, value=15000, step=500,
+                    key="ecl_loan_amnt",
+                    help="Determines baseline exposure. EAD is computed as EAD% x Loan Amount."
+                )
+                
+                e_annual_inc = st.number_input(
+                    "Annual Income ($):",
+                    min_value=0, max_value=5000000, value=65000, step=1000,
+                    key="ecl_annual_inc",
+                    help="Higher income reduces probability of default (PD) score points."
+                )
+                
+                e_dti = st.number_input(
+                    "Debt-to-Income (DTI) Ratio (%):",
+                    min_value=0.0, max_value=100.0, value=15.0, step=0.1,
+                    key="ecl_dti"
+                )
+                
+                e_revol_util = st.number_input(
+                    "Revolving Line Utilization (%):",
+                    min_value=0.0, max_value=150.0, value=45.0, step=1.0,
+                    key="ecl_revol_util",
+                    help="Revolving credit line utilization percentage. Higher values increase PD score."
+                )
+                
+                e_inq = st.selectbox(
+                    "Inquiries in Last 6 Months:",
+                    [0, 1, 2, 3],
+                    key="ecl_inq",
+                    help="Number of credit inquiries in past 6 months. Drives PD score."
+                )
+                
+                e_pub_rec = st.number_input(
+                    "Public Derogatory Records:",
+                    min_value=0, max_value=100, value=0, step=1,
+                    key="ecl_pub_rec",
+                    help="Number of derogatory public records on the credit history."
+                )
+                
+                e_bankrupt = st.selectbox(
+                    "Public Record Bankruptcies:",
+                    [0.0, 1.0, 2.0],
+                    key="ecl_bankrupt",
+                    help="Bankruptcy status. Drives PD scorecard points."
+                )
+                
+                e_purpose = st.selectbox(
+                    "Loan Purpose:",
+                    ["DEBT_CONSOLIDATION", "CREDIT_CARD", "HOME_IMPROVEMENT", "WEDDING", "CAR", "MAJOR_PURCHASE", "MEDICAL", "OTHER", "VACATION", "EDUCATIONAL", "HOUSE", "RENEWABLE_ENERGY", "SMALL_BUSINESS"],
+                    key="ecl_purpose",
+                    help="Stated purpose of the loan. Drives PD scorecard risk points."
+                )
+                
+                e_home = st.selectbox(
+                    "Home Ownership Status:",
+                    ["MORTGAGE", "RENT", "OWN", "OTHER"],
+                    key="ecl_home"
+                )
+                
+                e_emp = st.number_input(
+                    "Employment Length (Years):",
+                    min_value=0, max_value=10, value=5, step=1,
+                    key="ecl_emp"
+                )
+                
+                e_delinq = st.number_input(
+                    "Delinquencies in Past 2 Years:",
+                    min_value=0, max_value=50, value=0, step=1,
+                    key="ecl_delinq"
+                )
+                
+                e_open_acc = st.number_input(
+                    "Open Credit Accounts:",
+                    min_value=0, max_value=100, value=10, step=1,
+                    key="ecl_open_acc"
+                )
+                
+                e_cr_age = st.number_input(
+                    "Credit History Age (Months):",
+                    min_value=0, max_value=1200, value=180, step=12,
+                    key="ecl_cr_age"
+                )
+                
+            # Pack input dictionary
+            applicant_data = {
+                "loan_amnt": e_loan_amnt,
+                "funded_amnt": e_loan_amnt,
+                "annual_inc": e_annual_inc,
+                "dti": e_dti,
+                "revol_util": e_revol_util,
+                "inq_last_6mths": e_inq,
+                "pub_rec": e_pub_rec,
+                "pub_rec_bankruptcies": e_bankrupt,
+                "purpose": e_purpose.lower(),
+                "home_ownership": e_home,
+                "emp_length": e_emp,
+                "delinq_2yrs": e_delinq,
+                "open_acc": e_open_acc,
+                "credit_history_age": e_cr_age
+            }
+            
+        with col_ecl2:
+            st.subheader("Expected Credit Loss Diagnostics")
+            
+            # Predict
+            res = ecl_engine.predict_applicant_ecl(applicant_data)
+            
+            # Extract
+            score = res["credit_score"]
+            pd_val = res["probability_of_default"]
+            lgd_val = res["lgd_percentage"]
+            ead_pct = res["ead_percentage"]
+            ead_amt = res["ead_amount"]
+            ecl_val = res["expected_credit_loss"]
+            ecl_pct = res["expected_credit_loss_percentage"]
+            tier = res["ecl_risk_tier"]
+            pd_band = res["pd_risk_band"]
+            
+            # Colors based on Risk Tier
+            if tier == "Low ECL":
+                badge_bg = "#D1E7DD"
+                badge_color = "#0F5132"
+                border_color = "#A3CFBB"
+            elif tier == "Medium ECL":
+                badge_bg = "#FFF3CD"
+                badge_color = "#664D03"
+                border_color = "#FFE69C"
+            else:
+                badge_bg = "#F8D7DA"
+                badge_color = "#842029"
+                border_color = "#F5C2C7"
+                
+            st.markdown(f"""
+            <div style="background-color: var(--secondary-background-color); border: 1px solid rgba(128,128,128,0.15); border-radius: 12px; padding: 25px; margin-bottom: 20px;">
+                <div style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-color); opacity: 0.6; font-weight: 600;">ECL Risk Assessment</div>
+                <div style="display: inline-block; padding: 4px 12px; font-weight: 700; border-radius: 6px; font-size: 1.1rem; margin-top: 8px; margin-bottom: 20px; background-color: {badge_bg}; color: {badge_color}; border: 1px solid {border_color};">
+                    {tier}
+                </div>
+                
+                <div style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; color: var(--text-color); opacity: 0.6; font-weight: 600; margin-bottom: 4px;">Expected Credit Loss (ECL)</div>
+                <div style="font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 800; color: {badge_color if tier == 'High ECL' else 'var(--text-color)'}; line-height: 1.1; margin-bottom: 25px;">
+                    ${ecl_val:.2f}
+                    <span style="font-size: 1.05rem; font-weight: 500; opacity: 0.7; color: var(--text-color);">({ecl_pct:.2%})</span>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr; gap: 12px; border-top: 1px solid rgba(128,128,128,0.15); padding-top: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 0.88rem; color: var(--text-color); opacity: 0.75;">Credit Score & PD</span>
+                        <span style="font-family: monospace; font-size: 0.95rem; font-weight: 700; color: var(--text-color);">{score} pts ({pd_val:.2%})</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 0.88rem; color: var(--text-color); opacity: 0.75;">Loss Given Default (LGD)</span>
+                        <span style="font-family: monospace; font-size: 0.95rem; font-weight: 700; color: var(--text-color);">{lgd_val:.2%}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 0.88rem; color: var(--text-color); opacity: 0.75;">Exposure at Default (EAD)</span>
+                        <span style="font-family: monospace; font-size: 0.95rem; font-weight: 700; color: var(--text-color);">{ead_pct:.2%} (${ead_amt:,.2f})</span>
+                    </div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            st.markdown("### Decision Recommendation")
+            st.write(f"The baseline applicant scoring recommendation is **{res['pd_decision']}** based on their PD risk band (**{pd_band}**). Under the ECL Risk Tier system, this credit risk profile triggers a **{tier}** designation.")
+
+    st.markdown("<br/>", unsafe_allow_html=True)
+    st.subheader("Expected Credit Loss Flow (Sequencing credit risk)")
+    
+    # Drawing horizontal SVG sequencing flow
+    st.markdown("""
+    <div style="background-color: var(--secondary-background-color); border: 1px solid rgba(128,128,128,0.15); border-radius: 12px; padding: 25px; display: flex; justify-content: center; overflow-x: auto; margin-bottom: 25px;">
+        <svg width="680" height="120" viewBox="0 0 680 120" fill="none" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%;">
+            <!-- Step 1: PD -->
+            <rect x="10" y="10" width="130" height="70" rx="8" fill="#2563EB" fill-opacity="0.15" stroke="#2563EB" stroke-width="2"/>
+            <text x="75" y="38" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="var(--text-color)" text-anchor="middle">Probability (PD)</text>
+            <text x="75" y="58" font-family="'Inter', sans-serif" font-size="9" opacity="0.8" fill="var(--text-color)" text-anchor="middle">Underwriting Scorecard</text>
+            
+            <path d="M150 45 L 180 45" stroke="var(--text-color)" stroke-width="2" stroke-dasharray="3,3" marker-end="url(#arrow)"/>
+            
+            <!-- Step 2: EAD -->
+            <rect x="190" y="10" width="130" height="70" rx="8" fill="#10B981" fill-opacity="0.15" stroke="#10B981" stroke-width="2"/>
+            <text x="255" y="38" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="var(--text-color)" text-anchor="middle">Exposure (EAD)</text>
+            <text x="255" y="58" font-family="'Inter', sans-serif" font-size="9" opacity="0.8" fill="var(--text-color)" text-anchor="middle">Outstanding Balance</text>
+            
+            <path d="M330 45 L 360 45" stroke="var(--text-color)" stroke-width="2" stroke-dasharray="3,3" marker-end="url(#arrow)"/>
+            
+            <!-- Step 3: LGD -->
+            <rect x="370" y="10" width="130" height="70" rx="8" fill="#F97316" fill-opacity="0.15" stroke="#F97316" stroke-width="2"/>
+            <text x="435" y="38" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="var(--text-color)" text-anchor="middle">Severity (LGD)</text>
+            <text x="435" y="58" font-family="'Inter', sans-serif" font-size="9" opacity="0.8" fill="var(--text-color)" text-anchor="middle">Unrecovered Loss %</text>
+            
+            <path d="M510 45 L 540 45" stroke="var(--text-color)" stroke-width="2" stroke-dasharray="3,3" marker-end="url(#arrow)"/>
+            
+            <!-- Step 4: ECL -->
+            <rect x="550" y="10" width="120" height="70" rx="8" fill="#7B61FF" fill-opacity="0.2" stroke="#7B61FF" stroke-width="2"/>
+            <text x="610" y="38" font-family="'Inter', sans-serif" font-size="12" font-weight="800" fill="var(--text-color)" text-anchor="middle">ECL Value</text>
+            <text x="610" y="58" font-family="'Inter', sans-serif" font-size="9" font-weight="700" fill="var(--text-color)" text-anchor="middle">PD × LGD × EAD</text>
+            
+            <!-- Definitions -->
+            <defs>
+                <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--text-color)"/>
+                </marker>
+            </defs>
+        </svg>
+    </div>
+    """, unsafe_allow_html=True)
 
 
 
