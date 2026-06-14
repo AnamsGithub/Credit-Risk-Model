@@ -186,6 +186,8 @@ st.markdown("""
 <style>
     /* Custom Theme Variables for Light & Dark mode compatibility */
     :root {
+        --sidebar-bg: #FFFFFF;
+        --sidebar-tab-bg: #F3F4F6;
         --nav-bg-active: #002B49; /* Corporate navy */
         --nav-text-active: #FFFFFF;
         --nav-border-active: #002B49;
@@ -193,6 +195,8 @@ st.markdown("""
     
     @media (prefers-color-scheme: dark) {
         :root {
+            --sidebar-bg: #0E1117;
+            --sidebar-tab-bg: #1E293B;
             --nav-bg-active: #0C3E66; /* Brightened corporate blue for contrast */
             --nav-text-active: #FFFFFF;
             --nav-border-active: #0C3E66;
@@ -200,12 +204,16 @@ st.markdown("""
     }
     
     [data-theme="dark"] {
+        --sidebar-bg: #0E1117;
+        --sidebar-tab-bg: #1E293B;
         --nav-bg-active: #0C3E66;
         --nav-text-active: #FFFFFF;
         --nav-border-active: #0C3E66;
     }
     
     [data-theme="light"] {
+        --sidebar-bg: #FFFFFF;
+        --sidebar-tab-bg: #F3F4F6;
         --nav-bg-active: #002B49;
         --nav-text-active: #FFFFFF;
         --nav-border-active: #002B49;
@@ -225,9 +233,14 @@ st.markdown("""
     }
     
     /* Sidebar background override */
+    section[data-testid="stSidebar"],
+    section[data-testid="stSidebar"] [data-testid="stSidebarUserContent"],
+    section[data-testid="stSidebar"] > div {
+        background-color: var(--sidebar-bg) !important;
+        background: var(--sidebar-bg) !important;
+    }
     section[data-testid="stSidebar"] {
-        background-color: var(--secondary-background-color);
-        border-right: 1px solid var(--secondary-background-color);
+        border-right: 1px solid var(--sidebar-bg) !important;
     }
     
     /* Custom Card Design */
@@ -490,6 +503,17 @@ st.markdown("""
         }
     }
     
+    /* Mobile view sidebar overlay background opacity fix */
+    @media (max-width: 767px) {
+        section[data-testid="stSidebar"],
+        section[data-testid="stSidebar"] [data-testid="stSidebarUserContent"],
+        section[data-testid="stSidebar"] > div {
+            background-color: var(--sidebar-bg) !important;
+            background: var(--sidebar-bg) !important;
+            opacity: 1 !important;
+        }
+    }
+    
     /* PREMIUM SIDEBAR NAVIGATION OVERRIDES (LIGHT & DARK THEME COMPLIANT) */
     /* Hide the radio button circle inputs entirely */
     [data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] label > div:first-child {
@@ -505,7 +529,7 @@ st.markdown("""
     [data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] label {
         display: block !important;
         width: 100% !important;
-        background-color: var(--secondary-background-color) !important;
+        background-color: var(--sidebar-tab-bg) !important;
         border: 1px solid rgba(128, 128, 128, 0.15) !important;
         border-radius: 8px !important;
         padding: 12px 16px !important;
@@ -861,6 +885,8 @@ if is_dark:
     st.markdown("""
     <style>
         :root {
+            --sidebar-bg: #0E1117 !important;
+            --sidebar-tab-bg: #1E293B !important;
             --icon-color: #CBD5E1 !important;
             --primary-color: #60A5FA !important;
             --color-blue: #60A5FA !important;
@@ -876,6 +902,8 @@ else:
     st.markdown("""
     <style>
         :root {
+            --sidebar-bg: #FFFFFF !important;
+            --sidebar-tab-bg: #F3F4F6 !important;
             --icon-color: #334155 !important;
             --primary-color: #2563EB !important;
             --color-blue: #2563EB !important;
