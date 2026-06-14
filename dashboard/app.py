@@ -1357,7 +1357,7 @@ elif nav_selection == "Understanding Credit Risk Modeling":
     
     # 2. What is Probability of Default (PD)?
     with st.expander("2. What is Probability of Default (PD)?"):
-        st.markdown(textwrap.dedent("""
+        st.markdown(clean_html("""
         <div style="display: flex; align-items: center; margin-bottom: 12px;">
             <svg class="icon" style="color: var(--color-blue); width: 22px; height: 22px; margin-right: 8px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
             <h5 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-color);">Probability of Default (PD)</h5>
@@ -1397,7 +1397,7 @@ elif nav_selection == "Understanding Credit Risk Modeling":
         
     # 3. What is a Credit Scorecard?
     with st.expander("3. What is a Credit Scorecard?", expanded=False):
-        st.markdown(textwrap.dedent("""
+        st.markdown(clean_html("""
         <div style="display: flex; align-items: center; margin-bottom: 12px;">
             <svg class="icon" style="color: var(--color-blue); width: 22px; height: 22px; margin-right: 8px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"></line><line x1="5" y1="7" x2="19" y2="7"></line><path d="M5 7L2 17h6L5 7z"></path><path d="M19 7l-3 10h6l-3-10z"></path></svg>
             <h5 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-color);">Credit Scorecard</h5>
@@ -1444,7 +1444,7 @@ elif nav_selection == "Understanding Credit Risk Modeling":
         
     # 4. Why Use Weight of Evidence (WoE)?
     with st.expander("4. Why Use Weight of Evidence (WoE)?", expanded=False):
-        st.markdown(textwrap.dedent("""
+        st.markdown(clean_html("""
         <div style="display: flex; align-items: center; margin-bottom: 12px;">
             <svg class="icon" style="color: var(--color-blue); width: 22px; height: 22px; margin-right: 8px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
             <h5 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-color);">Weight of Evidence (WoE) Transformation</h5>
@@ -1511,7 +1511,7 @@ elif nav_selection == "Understanding Credit Risk Modeling":
         
     # 5. What is Information Value (IV)?
     with st.expander("5. What is Information Value (IV)?", expanded=False):
-        st.markdown(textwrap.dedent("""
+        st.markdown(clean_html("""
         <div style="display: flex; align-items: center; margin-bottom: 12px;">
             <svg class="icon" style="color: var(--color-blue); width: 22px; height: 22px; margin-right: 8px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
             <h5 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-color);">Information Value (IV)</h5>
@@ -1600,7 +1600,7 @@ elif nav_selection == "Understanding Credit Risk Modeling":
         
     # 7. Why Validate Models?
     with st.expander("7. Why Validate Models?", expanded=False):
-        st.markdown(textwrap.dedent("""
+        st.markdown(clean_html("""
         <div style="display: flex; align-items: center; margin-bottom: 12px;">
             <svg class="icon" style="color: var(--color-blue); width: 22px; height: 22px; margin-right: 8px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
             <h5 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-color);">Model Validation Metrics</h5>
@@ -1651,7 +1651,7 @@ elif nav_selection == "Understanding Credit Risk Modeling":
         
     # 8. Why Monitor Models After Deployment?
     with st.expander("8. Why Monitor Models After Deployment?", expanded=False):
-        st.markdown(textwrap.dedent("""
+        st.markdown(clean_html("""
         <div style="display: flex; align-items: center; margin-bottom: 12px;">
             <svg class="icon" style="color: var(--color-blue); width: 22px; height: 22px; margin-right: 8px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
             <h5 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-color);">Post-Deployment Monitoring</h5>
@@ -1696,7 +1696,7 @@ elif nav_selection == "Understanding Credit Risk Modeling":
         
     # 9. End-to-End Lending Journey Summary
     with st.expander("9. End-to-End Lending Journey Lifecycle", expanded=False):
-        st.markdown(textwrap.dedent("""
+        st.markdown(clean_html("""
         <div style="display: flex; align-items: center; margin-bottom: 12px;">
             <svg class="icon" style="color: var(--color-blue); width: 22px; height: 22px; margin-right: 8px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
             <h5 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-color);">Lending Risk Operations Sequence</h5>
