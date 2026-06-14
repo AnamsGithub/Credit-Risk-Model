@@ -454,38 +454,40 @@ st.markdown("""
     }
     
     /* ========================================
-       SIDEBAR: FULLY NON-COLLAPSABLE SETUP
+       SIDEBAR: RESPONSIVE NON-COLLAPSABLE SETUP
        ======================================== */
     
-    /* Hide ALL collapse/expand control buttons in Streamlit */
-    [data-testid="collapsedControl"],
-    button[data-testid="baseButton-header"],
-    [data-testid="stSidebarCollapseButton"],
-    .stSidebarCollapseButton,
-    button[aria-label="Close sidebar"],
-    button[aria-label="Open sidebar"],
-    [data-testid="stSidebar"] > div:first-child > div > button,
-    header button[kind="header"] {
-        display: none !important;
-        visibility: hidden !important;
-        pointer-events: none !important;
-    }
-    
-    /* Keep sidebar always visible and at a fixed width */
-    section[data-testid="stSidebar"] {
-        min-width: 300px !important;
-        max-width: 300px !important;
-        width: 300px !important;
-        transform: none !important;
-        transition: none !important;
-    }
-    
-    /* Prevent sidebar from going into collapsed state */
-    section[data-testid="stSidebar"][aria-expanded="false"] {
-        transform: none !important;
-        display: block !important;
-        visibility: visible !important;
-        min-width: 300px !important;
+    @media (min-width: 768px) {
+        /* Hide ALL collapse/expand control buttons in Streamlit on desktop only */
+        [data-testid="collapsedControl"],
+        button[data-testid="baseButton-header"],
+        [data-testid="stSidebarCollapseButton"],
+        .stSidebarCollapseButton,
+        button[aria-label="Close sidebar"],
+        button[aria-label="Open sidebar"],
+        [data-testid="stSidebar"] > div:first-child > div > button,
+        header button[kind="header"] {
+            display: none !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+        }
+        
+        /* Keep sidebar always visible and at a fixed width on desktop only */
+        section[data-testid="stSidebar"] {
+            min-width: 300px !important;
+            max-width: 300px !important;
+            width: 300px !important;
+            transform: none !important;
+            transition: none !important;
+        }
+        
+        /* Prevent sidebar from going into collapsed state on desktop only */
+        section[data-testid="stSidebar"][aria-expanded="false"] {
+            transform: none !important;
+            display: block !important;
+            visibility: visible !important;
+            min-width: 300px !important;
+        }
     }
     
     /* PREMIUM SIDEBAR NAVIGATION OVERRIDES (LIGHT & DARK THEME COMPLIANT) */
@@ -515,25 +517,28 @@ st.markdown("""
     
     /* Individual category borders for inactive tabs */
     [data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] > label:nth-child(1) {
-        border-left: 4px solid #0D6EFD !important;
+        border-left: 4px solid #2563EB !important;
     }
     [data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] > label:nth-child(2) {
-        border-left: 4px solid #198754 !important;
+        border-left: 4px solid #1D4ED8 !important;
     }
     [data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] > label:nth-child(3) {
-        border-left: 4px solid #20C997 !important;
+        border-left: 4px solid #0284C7 !important;
     }
     [data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] > label:nth-child(4) {
-        border-left: 4px solid #6F42C1 !important;
+        border-left: 4px solid #0F766E !important;
     }
     [data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] > label:nth-child(5) {
-        border-left: 4px solid #D97706 !important;
+        border-left: 4px solid #059669 !important;
     }
     [data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] > label:nth-child(6) {
-        border-left: 4px solid #FD7E14 !important;
+        border-left: 4px solid #10B981 !important;
     }
     [data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] > label:nth-child(7) {
-        border-left: 4px solid #DC3545 !important;
+        border-left: 4px solid #B45309 !important;
+    }
+    [data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] > label:nth-child(8) {
+        border-left: 4px solid #BE123C !important;
     }
     
     /* Selection hover effect */
@@ -552,25 +557,28 @@ st.markdown("""
     
     /* Active indicators with neon highlights */
     [data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] > label:nth-child(1):has(input:checked) {
-        border-left: 6px solid #00D2FF !important;
+        border-left: 6px solid #60A5FA !important;
     }
     [data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] > label:nth-child(2):has(input:checked) {
-        border-left: 6px solid #2ECC71 !important;
+        border-left: 6px solid #3B82F6 !important;
     }
     [data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] > label:nth-child(3):has(input:checked) {
-        border-left: 6px solid #1ABC9C !important;
+        border-left: 6px solid #38BDF8 !important;
     }
     [data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] > label:nth-child(4):has(input:checked) {
-        border-left: 6px solid #A55EEA !important;
+        border-left: 6px solid #2DD4BF !important;
     }
     [data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] > label:nth-child(5):has(input:checked) {
-        border-left: 6px solid #F1C40F !important;
+        border-left: 6px solid #34D399 !important;
     }
     [data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] > label:nth-child(6):has(input:checked) {
-        border-left: 6px solid #E67E22 !important;
+        border-left: 6px solid #4ADE80 !important;
     }
     [data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] > label:nth-child(7):has(input:checked) {
-        border-left: 6px solid #E74C3C !important;
+        border-left: 6px solid #FBBF24 !important;
+    }
+    [data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] > label:nth-child(8):has(input:checked) {
+        border-left: 6px solid #FB7185 !important;
     }
     
     /* White text on selected nav items */
@@ -880,11 +888,14 @@ else:
     </style>
     """, unsafe_allow_html=True)
 
-# JavaScript: Force sidebar to stay permanently expanded (non-collapsable)
+# JavaScript: Force sidebar to stay permanently expanded (non-collapsable) on desktop, but allow collapsable drawer on mobile
 st.markdown("""
 <script>
 (function keepSidebarExpanded() {
     function ensureExpanded() {
+        if (window.innerWidth < 768) {
+            return; // Allow standard sidebar behavior on mobile
+        }
         const sidebar = document.querySelector('[data-testid="stSidebar"]');
         if (sidebar && sidebar.getAttribute('aria-expanded') === 'false') {
             sidebar.setAttribute('aria-expanded', 'true');
@@ -898,10 +909,13 @@ st.markdown("""
             'button[aria-label="Close sidebar"], button[aria-label="Open sidebar"]'
         ).forEach(el => { el.style.display = 'none'; });
     }
-    // Run immediately and then observe DOM changes
-    ensureExpanded();
-    const observer = new MutationObserver(ensureExpanded);
-    observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['aria-expanded', 'style'] });
+    
+    // Only set up observer if we are on desktop
+    if (window.innerWidth >= 768) {
+        ensureExpanded();
+        const observer = new MutationObserver(ensureExpanded);
+        observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['aria-expanded', 'style'] });
+    }
 })();
 </script>
 """, unsafe_allow_html=True)
